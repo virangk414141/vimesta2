@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vimesta Cloud - Unlimited Free Cloud Storage</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .login-step {
+            display: none;
+        }
+
+        .login-step.active {
+            display: block;
+        }
+
+        .otp-input {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 24px 0;
+        }
+
+        .otp-input input {
+            width: 52px;
+            height: 60px;
+            text-align: center;
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: var(--bg-glass);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .otp-input input:focus {
+            border-color: var(--brand-primary);
+        }
+
+        .error-box {
+            padding: 14px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: var(--radius-md);
+            color: #f87171;
+            margin-bottom: 16px;
+        }
+
+        .success-box {
+            padding: 14px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: var(--radius-md);
+            color: #4ade80;
+            margin-bottom: 16px;
+        }
+
+        .info-box {
+            padding: 14px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: var(--radius-md);
+            color: #60a5fa;
+            margin-bottom: 16px;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .back-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+
+        .back-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            outline: none;
+            margin-bottom: 16px;
+        }
+
+        .form-input:focus {
+            border-color: var(--brand-primary);
+        }
+
+        .phone-display {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--brand-primary);
+            text-align: center;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="container navbar-content">
+            <a href="#" class="navbar-logo">
+                <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="40" rx="10" fill="url(#gradient)" />
+                    <path d="M12 20L18 26L28 14" stroke="white" stroke-width="3" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#6366f1" />
+                            <stop offset="100%" stop-color="#a855f7" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="text-gradient">Vimesta Cloud</span>
+            </a>
+            <ul class="navbar-menu">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How it Works</a></li>
+            </ul>
+            <div class="navbar-actions">
+                <button class="btn btn-primary" onclick="openLoginModal()">Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <div class="hero-badge"><span>🚀</span> Powered by Telegram</div>
+                <h1 class="hero-title"><span class="text-gradient">Unlimited</span> Cloud Storage</h1>
+                <p class="hero-description">Store unlimited files for free. Files are saved in your personal Telegram
+                    account.</p>
+                <div class="hero-cta">
+                    <button class="btn btn-primary btn-lg" onclick="openLoginModal()">🚀 Get Started Free</button>
+                </div>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">∞</div>
+                        <div class="hero-stat-label">Storage</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">2GB</div>
+                        <div class="hero-stat-label">Per File</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">Free</div>
+                        <div class="hero-stat-label">Forever</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-card glass">
+                    <div class="hero-card-header">
+                        <div class="hero-card-dots"><span></span><span></span><span></span></div>
+                        <span style="color: var(--text-muted);">My Files</span>
+                    </div>
+                    <div class="hero-card-files">
+                        <div class="hero-file-item">
+                            <div class="hero-file-icon">🖼️</div>
+                            <div class="hero-file-info">
+                                <div class="hero-file-name">photos.zip</div>
+                                <div class="hero-file-size">1.2 GB</div>
+                            </div>
+                        </div>
+                        <div class="hero-file-item">
+                            <div class="hero-file-icon">🎬</div>
+                            <div class="hero-file-info">
+                                <div class="hero-file-name">video.mp4</div>
+                                <div class="hero-file-size">856 MB</div>
+                            </div>
+                        </div>
+                        <div class="hero-file-item">
+                            <div class="hero-file-icon">📄</div>
+                            <div class="hero-file-info">
+                                <div class="hero-file-name">document.pdf</div>
+                                <div class="hero-file-size">24 MB</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">How It <span class="text-gradient">Works</span></h2>
+            </div>
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Link Phone</h3>
+                    <p class="step-description">Open @Vimesta_bot on Telegram and share your phone number</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Enter Phone</h3>
+                    <p class="step-description">Enter your phone number here to get OTP on Telegram</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Upload Files</h3>
+                    <p class="step-description">Upload files from dashboard - they go to your Telegram!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Features</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card glass">
+                    <div class="feature-icon">☁️</div>
+                    <h3 class="feature-title">Unlimited Storage</h3>
+                    <p class="feature-description">No limits on how much you can store</p>
+                </div>
+                <div class="feature-card glass">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title">Secure</h3>
+                    <p class="feature-description">Files stored in your personal Telegram</p>
+                </div>
+                <div class="feature-card glass">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Fast</h3>
+                    <p class="feature-description">Telegram's global infrastructure</p>
+                </div>
+                <div class="feature-card glass">
+                    <div class="feature-icon">🖼️</div>
+                    <h3 class="feature-title">Image Preview</h3>
+                    <p class="feature-description">See thumbnails of your images</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 Vimesta Cloud</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h3 id="modalTitle">Login</h3>
+                <button class="modal-close" onclick="closeLoginModal()">&times;</button>
+            </div>
+
+            <!-- Step 1: Phone Number -->
+            <div class="login-step active" id="step1">
+                <div id="step1Error"></div>
+                <div class="info-box">
+                    💡 <b>First time?</b> Open <a href="https://t.me/Vimesta_bot" target="_blank"
+                        style="color:#60a5fa;">@Vimesta_bot</a> on Telegram and share your phone number
+                </div>
+                <input type="tel" class="form-input" id="phoneInput" placeholder="Enter your mobile number"
+                    maxlength="15">
+                <button class="btn btn-primary btn-lg" style="width:100%;" onclick="requestOTP()" id="requestOtpBtn">
+                    Send OTP →
+                </button>
+            </div>
+
+            <!-- Step 2: OTP -->
+            <div class="login-step" id="step2">
+                <button class="back-btn" onclick="showStep('step1')">← Back</button>
+                <div id="step2Error"></div>
+                <div class="success-box">✅ OTP sent to Telegram!</div>
+                <div class="phone-display" id="phoneDisplay">+91 98765 43210</div>
+                <p style="color:var(--text-secondary);text-align:center;margin-bottom:16px;">Enter 6-digit OTP</p>
+                <div class="otp-input">
+                    <input type="text" maxlength="1" class="otp-digit" data-index="0">
+                    <input type="text" maxlength="1" class="otp-digit" data-index="1">
+                    <input type="text" maxlength="1" class="otp-digit" data-index="2">
+                    <input type="text" maxlength="1" class="otp-digit" data-index="3">
+                    <input type="text" maxlength="1" class="otp-digit" data-index="4">
+                    <input type="text" maxlength="1" class="otp-digit" data-index="5">
+                </div>
+                <button class="btn btn-primary btn-lg" style="width:100%;" onclick="verifyOTP()" id="verifyOtpBtn">
+                    Verify & Login
+                </button>
+                <p style="color:var(--text-muted);margin-top:16px;font-size:0.85rem;text-align:center;">
+                    Didn't receive? <a href="#" onclick="requestOTP();return false;"
+                        style="color:var(--brand-secondary);">Resend</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        const API = 'http://localhost:5000';
+        let phone = '';
+
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+            showStep('step1');
+            document.getElementById('phoneInput').focus();
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+            phone = '';
+            document.getElementById('phoneInput').value = '';
+            document.querySelectorAll('.otp-digit').forEach(i => i.value = '');
+            document.getElementById('step1Error').innerHTML = '';
+            document.getElementById('step2Error').innerHTML = '';
+        }
+
+        function showStep(s) {
+            document.querySelectorAll('.login-step').forEach(el => el.classList.remove('active'));
+            document.getElementById(s).classList.add('active');
+            if (s === 'step2') document.querySelector('.otp-digit[data-index="0"]').focus();
+        }
+
+        document.getElementById('loginModal').addEventListener('click', e => {
+            if (e.target.id === 'loginModal') closeLoginModal();
+        });
+
+        function showToast(msg, type = 'info') {
+            const t = document.createElement('div');
+            t.className = `toast ${type}`;
+            t.textContent = msg;
+            document.getElementById('toastContainer').appendChild(t);
+            setTimeout(() => t.remove(), 4000);
+        }
+
+        async function requestOTP() {
+            const input = document.getElementById('phoneInput').value.trim();
+            const btn = document.getElementById('requestOtpBtn');
+            const err = document.getElementById('step1Error');
+
+            err.innerHTML = '';
+
+            if (!input || input.length < 10) {
+                err.innerHTML = '<div class="error-box">Enter valid phone number</div>';
+                return;
+            }
+
+            phone = input.startsWith('+') ? input : '+91' + input.replace(/\D/g, '').slice(-10);
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading-spinner"></span> Sending...';
+
+            try {
+                const res = await fetch(`${API}/api/auth/request-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    document.getElementById('phoneDisplay').textContent = phone;
+                    showStep('step2');
+                    showToast('OTP sent!', 'success');
+                } else if (data.error === 'phone_not_linked') {
+                    err.innerHTML = `<div class="error-box">
+                        📱 Phone not linked!<br><br>
+                        <b>Step 1:</b> Open <a href="https://t.me/Vimesta_bot" target="_blank" style="color:#f87171;">@Vimesta_bot</a> on Telegram<br>
+                        <b>Step 2:</b> Click "Share My Phone Number"<br>
+                        <b>Step 3:</b> Come back and try again
+                    </div>`;
+                } else {
+                    err.innerHTML = `<div class="error-box">${data.message || data.error}</div>`;
+                }
+            } catch (e) {
+                err.innerHTML = '<div class="error-box">Connection error. Is server running?</div>';
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = 'Send OTP →';
+        }
+
+        async function verifyOTP() {
+            const otp = Array.from(document.querySelectorAll('.otp-digit')).map(i => i.value).join('');
+            const btn = document.getElementById('verifyOtpBtn');
+            const err = document.getElementById('step2Error');
+
+            err.innerHTML = '';
+
+            if (otp.length !== 6) {
+                err.innerHTML = '<div class="error-box">Enter 6-digit OTP</div>';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading-spinner"></span> Verifying...';
+
+            try {
+                const res = await fetch(`${API}/api/auth/verify-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone, otp })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    localStorage.setItem('vimesta_token', data.token);
+                    localStorage.setItem('vimesta_user', JSON.stringify(data.user));
+                    showToast('Login successful!', 'success');
+                    setTimeout(() => window.location.href = 'dashboard.html', 800);
+                } else {
+                    err.innerHTML = `<div class="error-box">${data.error}</div>`;
+                    document.querySelectorAll('.otp-digit').forEach(i => i.value = '');
+                    document.querySelector('.otp-digit[data-index="0"]').focus();
+                }
+            } catch (e) {
+                err.innerHTML = '<div class="error-box">Connection error</div>';
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = 'Verify & Login';
+        }
+
+        // OTP input handling
+        document.querySelectorAll('.otp-digit').forEach((inp, i) => {
+            inp.addEventListener('input', e => {
+                if (!/^\d*$/.test(e.target.value)) { e.target.value = ''; return; }
+                if (e.target.value && i < 5) document.querySelector(`.otp-digit[data-index="${i + 1}"]`).focus();
+                if (i === 5 && e.target.value && Array.from(document.querySelectorAll('.otp-digit')).every(x => x.value)) verifyOTP();
+            });
+            inp.addEventListener('keydown', e => {
+                if (e.key === 'Backspace' && !e.target.value && i > 0)
+                    document.querySelector(`.otp-digit[data-index="${i - 1}"]`).focus();
+            });
+            inp.addEventListener('paste', e => {
+                e.preventDefault();
+                const p = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+                p.split('').forEach((c, j) => {
+                    const el = document.querySelector(`.otp-digit[data-index="${j}"]`);
+                    if (el) el.value = c;
+                });
+            });
+        });
+
+        // Auto-login if token exists
+        document.addEventListener('DOMContentLoaded', () => {
+            const t = localStorage.getItem('vimesta_token');
+            if (t) {
+                fetch(`${API}/api/auth/verify`, { headers: { 'Authorization': `Bearer ${t}` } })
+                    .then(r => r.json())
+                    .then(d => { if (d.success) window.location.href = 'dashboard.html'; })
+                    .catch(() => { });
+            }
+        });
+    </script>
+</body>
+
+</html>
